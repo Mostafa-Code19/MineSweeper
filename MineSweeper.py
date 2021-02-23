@@ -17,25 +17,30 @@ def countTheBombs(round):
         bombs.append(bombsOfEachRow)
     return bombs
 
-def numberOfBombsAround(round, rowStart, columnOfUnknown):
-    rows = round.split(' ')
+def numberOfBombsAround(round, elementRow, elementColumn):                      # * 6 *
+                                                                                # 3 ? 3
+    rows = round.split(' ')                                                     # 1 * 2
     bombs = 0
-    columnRange = 3
-    columnStart = 0
-    if columnOfUnknown == 3:
-        columnStart = 2
-        columnRange = 2
-    elif columnOfUnknown == 1:
-        columnStart = 0
-        columnRange = 2
-    try:
-        for readColumnTime in range(3):
-            for column in range(columnRange):
-                eachElement = rows[columnStart + readColumnTime][column]
-                if eachElement == '*':
+    if elementRow == 1 or elementRow == 3:
+        if elementColumn == 1:
+            while elementColumn <= 2:
+               for i in range(2):
+                    element = (rows[elementColumn - 1][i])
+                    if element == '*':
+                        bombs += 1
+               elementColumn += 1
+        elif elementColumn == 3:
+            while elementColumn >= 2:
+               for i in range(3):
+                    element = (rows[elementColumn - 1][i])
+                    if element == '*':
+                        bombs += 1
+               elementColumn -= 1
+    else:
+        for i in (elementColumn - 2, elementColumn - 1, elementColumn):
+            for j in range(3):
+                if rows[i][j] == '*':
                     bombs += 1
-    except IndexError:
-        print('outOfIndex')
 
     return solution(bombs)
 
@@ -52,9 +57,9 @@ def countTheunknown(round):
     # print(unknown)
     return unknown
 
-def positionOfTheElements(round, find):                   # 1 2 1
-    rows = round.split(' ')                               # * ? *
-    countOfBombsInEachRow = countTheunknown(round)        # 1 2 1
+def positionOfTheElements(round, find):                   # 2 * ?    ? 3 *    * 6 *     
+    rows = round.split(' ')                               # * 3 *    * 6 *    3 ? 3 
+    countOfBombsInEachRow = countTheunknown(round)        # 1 2 1    1 2 1    1 * 2
     for row in range(3):
         if countOfBombsInEachRow[row] >= 1:
             for element in range(3):
@@ -62,7 +67,7 @@ def positionOfTheElements(round, find):                   # 1 2 1
                     elementRow = row + 1
                     elementColumn = element + 1
                     print(f'The element: {elementRow}:{elementColumn}')
-                    print(numberOfBombsAround(round, elementRow - 1, elementColumn))
+                    print(numberOfBombsAround(round, elementRow, elementColumn))
     return 'Done'
 
 def solution(answer):
@@ -70,7 +75,7 @@ def solution(answer):
 
 
 
-print(positionOfTheElements('121 *?* 121', '?'))
+print(positionOfTheElements('*6* 3?3 1*2', '?'))
 # try: 
 #     # print(countTheBombs('121 *?* 121'))
 #     # print(showTheRows('121 *?* 121'))
