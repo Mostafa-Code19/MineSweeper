@@ -30,16 +30,15 @@ def countTheunknown(round):
     # print(unknown)
     return unknown
 
-def resolveTheUnknown(round):
-    rows = round.split(' ')
-    countOfBombsInEachRow = countTheunknown(round)
+def positionOfTheElements(round, find):                   # 1 2 1
+    rows = round.split(' ')                               # * ? *
+    countOfBombsInEachRow = countTheunknown(round)        # 1 2 1
     for row in range(3):
-        #! continue
         if countOfBombsInEachRow[row] >= 1:
-            print(countTheBombs(round)[row])
-        else:
-            print('no')
-
+            for element in range(3):
+                if rows[row][element] == find:
+                    print(row + 1, element + 1)
+                    #! should count the bomb around
 
     return 'Done'
 
@@ -54,7 +53,7 @@ try:
     # print(countTheBombs('121 *?* 121'))
     # print(showTheRows('121 *?* 121'))
     # print(countTheunknown('121 *?* 121'))
-    print(resolveTheUnknown('121 *?* 121'))
+    print(positionOfTheElements('121 *?* 121', '?'))
 
 except Exception as e:
     print(e)
