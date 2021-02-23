@@ -17,6 +17,28 @@ def countTheBombs(round):
         bombs.append(bombsOfEachRow)
     return bombs
 
+def numberOfBombsAround(round, rowStart, columnOfUnknown):
+    rows = round.split(' ')
+    bombs = 0
+    columnRange = 3
+    columnStart = 0
+    if columnOfUnknown == 3:
+        columnStart = 2
+        columnRange = 2
+    elif columnOfUnknown == 1:
+        columnStart = 0
+        columnRange = 2
+    try:
+        for readColumnTime in range(3):
+            for column in range(columnRange):
+                eachElement = rows[columnStart + readColumnTime][column]
+                if eachElement == '*':
+                    bombs += 1
+    except IndexError:
+        print('outOfIndex')
+
+    return solution(bombs)
+
 def countTheunknown(round):
     rows = round.split(' ')
     unknown = []
@@ -37,23 +59,23 @@ def positionOfTheElements(round, find):                   # 1 2 1
         if countOfBombsInEachRow[row] >= 1:
             for element in range(3):
                 if rows[row][element] == find:
-                    print(row + 1, element + 1)
-                    #! should count the bomb around
-
+                    elementRow = row + 1
+                    elementColumn = element + 1
+                    print(f'The element: {elementRow}:{elementColumn}')
+                    print(numberOfBombsAround(round, elementRow - 1, elementColumn))
     return 'Done'
 
-    #     for elements in range(3):
-    #         unknownOfRow = row[elements]
-    #         if unknownOfRow >= 1:
-    #             print(row.index(row[elements]))
-    return ''
+def solution(answer):
+    return f'? = {answer}' 
 
 
-try: 
-    # print(countTheBombs('121 *?* 121'))
-    # print(showTheRows('121 *?* 121'))
-    # print(countTheunknown('121 *?* 121'))
-    print(positionOfTheElements('121 *?* 121', '?'))
 
-except Exception as e:
-    print(e)
+print(positionOfTheElements('121 *?* 121', '?'))
+# try: 
+#     # print(countTheBombs('121 *?* 121'))
+#     # print(showTheRows('121 *?* 121'))
+#     # print(countTheunknown('121 *?* 121'))
+#     print(positionOfTheElements('121 *** 12?', '?'))
+
+# except Exception as e:
+#     print(e)
