@@ -1,2 +1,2 @@
 # MineSweeper
-MineSweeper solver in 3 columns
+Not finished right now
