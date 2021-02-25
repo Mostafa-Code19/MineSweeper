@@ -1,107 +1,114 @@
-def showTheRows(round):
-    rows = round.split(' ')
-    numberOfRows = len(rows)
-    for row in range(numberOfRows):
-        print(rows[row])
-    return ''
 
-def countTheBombs(round):
-    rows = round.split(' ')
-    bombs = []
-    for i in range(len(rows)):
-        bombsOfEachRow = 0
-        for j in range(3):
-            eachElement = rows[i][j]
-            if eachElement == '*':
-                bombsOfEachRow += 1
-        bombs.append(bombsOfEachRow)
-    return bombs
-
-def numberOfBombsAround(round, elementRow, elementColumn):                      # * 6 *
-                                                                                # 3 ? 3
-    rows = round.split(' ')                                                     # 1 * 2
-    bombs = 0
-    if elementRow == 1 or elementRow == 3:
-        if elementColumn == 1:
-            while elementColumn <= 2:
-               for i in range(2):
-                    element = (rows[elementColumn - 1][i])
-                    if element == '*':
-                        bombs += 1
-               elementColumn += 1
-        elif elementColumn == 3:
-            while elementColumn >= 2:
-               for i in range(3):
-                    element = (rows[elementColumn - 1][i])
-                    if element == '*':
-                        bombs += 1
-               elementColumn -= 1
-    else:
-        for i in (elementColumn - 2, elementColumn - 1, elementColumn):
-            for j in range(3):
-                if rows[i][j] == '*':
-                    bombs += 1
-
-    return solution(bombs)
-
-def countTheunknown(round):
-    rows = round.split(' ')
-    unknown = []
-    for i in range(len(rows)):
-        unknownForEachrow = 0
-        for j in range(3):
-            eachElement = rows[i][j]
-            if eachElement == '?':
-                unknownForEachrow += 1
-        unknown.append(unknownForEachrow)
-    # print(unknown)
-    return unknown
-
-def positionOfTheElements(round, find):                   # 2 * ?    ? 3 *    * 6 *     
-    rows = round.split(' ')                               # * 3 *    * 6 *    3 ? 3 
-    countOfBombsInEachRow = countTheunknown(round)        # 1 2 1    1 2 1    1 * 2
-    for row in range(3):
-        if countOfBombsInEachRow[row] >= 1:
-            for element in range(3):
-                if rows[row][element] == find:
-                    elementRow = row + 1
-                    elementColumn = element + 1
-                    print(f'The element: {elementRow}:{elementColumn}')
-                    print(numberOfBombsAround(round, elementRow, elementColumn))
-    return 'Done'
-
-def solution(answer):
-    return f'? = {answer}' 
-
-def readAllaroundTheElement(game):
-    rows = game.split(' ')
-    rows2 = '123456789'
-    # 2:3 => 12 13 22 32 33 = -11 -10 -1 +9 10
-    # 2:0 => 10 11 20 21 = -10 -9 +1
-    # 1:1 => 01 02 03 10 11 12 20 21 22 = -10 -9 -8 -1 +9 +10 +11
-    # 4 => 0 1 2 3 4 5 6 8 = -4 -3 -2 -1 +1 +2 +3 +4
-    # 3 => 0 1 4 6 7 => -3 -2 +1 +3 +4
-    # print(rows[2 - 1][3 - 1])
-    moves = [-4, -3, -2, -1, +1, +2, +3, +4]
-    for i in (moves):
-        try:
-            place = 3 + i
-            print(rows2[place])
-        except:
-            pass
-    return 
+import logging
+logging.basicConfig(level=logging.DEBUG, format='log: %(message)s')
+logging.disable(logging.CRITICAL)
+def log(code):
+    logging.debug(code)
 
 
+# playground = ['122', '?*?', '?2?']  # = 122 S** S2S
+# playground = ['?3*', '*6*', '***']
+# playground = ['221', '?*?', '???']
+# playground = ['2?1', '?21', '11S']
+playgroundBefore = ['3?2', '??2', '221']
+playground = ['3?2', '??2', '221']
 
 
-# print(positionOfTheElements('*6* 3?3 1*2', '?'))
-print(readAllaroundTheElement('*6* 3?3 1*2'))
+x = 3
+y = 3
+playgroundsize = [x, y]
 
-# try: 
-#     # print(countTheBombs('121 *?* 121'))
-#     # print(showTheRows('121 *?* 121'))
-#     # print(countTheunknown('121 *?* 121'))
-#     print(positionOfTheElements('121 *** 12?', '?'))
+def corner(row, column):
+    log('enter corner')
+    if row == 0 and column == 0: return 'topLeft'
+    elif row == 0 and column == x: return 'upRight'
+    elif row == x and column == 0: return 'downLeft'
+    elif row == x and column == y: return 'downRight'
+    else: return False
 
-# except Exception as e:
-#     print(e)
+def AnalyzeAround(element, row, column):
+    log('enter check')        
+    elementAround = []
+    whichCorner = corner(row, column)
+    log(f'whichCorner: {whichCorner}')
+    if whichCorner != False:
+        log(f'corner: TRUE')
+        if whichCorner == 'topLeft':
+            for row in range(2):
+                for column in range(2):
+                    elementAround.append(playground[row][column])
+            checkAround(element, elementAround, whichCorner)
+    return
+
+def checkAround(element, elementAround, where):
+    log('enter checkAround')
+    unknownCounter = elementAround.count('?')
+    unknownIndex = (elementAround.index('?'))
+    bombCounter = elementAround.count('*')
+    log(f'number of ?: {unknownCounter} | number of *: {bombCounter} | Index of ?: {unknownIndex}')
+
+    if element == '1':
+        if unknownCounter == 1 and bombCounter == 0 in elementAround:
+            addSolution(where, unknownCounter, solution = '*')
+        elif '*' in elementAround:
+            addSolution(where, unknownCounter, solution = 'S')
+        else:
+            log('There is an error in checkAround')
+
+    elif element == '2':
+        if unknownCounter == 1 and bombCounter == 1:
+            addSolution(where, unknownCounter, solution = '*')
+        elif unknownCounter == 2:
+            addSolution(where, unknownCounter, solution = '*')
+        elif bombCounter == 2:
+            addSolution(where, 8, solution = 'S')
+        else:
+            log('There is an error in checkAround')
+
+    elif element == '3':
+        log(f'Entering element 3')
+        if unknownCounter == 3 and bombCounter == 0:
+            addSolution(where, 8, solution = '*')
+        elif unknownCounter == 2 and bombCounter == 1:
+            addSolution(where, unknownCounter, solution = '*')
+        elif unknownCounter == 1 and bombCounter == 2:
+            addSolution(where, unknownCounter, solution = '*')
+        elif bombCounter == 3:
+            addSolution(where, 8, solution = 'S')
+        else:
+            log('There is an error in checkAround')
+        log('going to end')
+        return solved()
+    else: return 'The element bigger than 3'
+
+def addSolution(where, unknownToAdd, solution):
+    if where == 'topLeft':
+        for row in range(2):
+            for column in range(2):
+                if playground[row][column] == '?':
+                    x = playground[row].replace('?', solution, unknownToAdd)
+                    playground[row] = x
+    return
+
+def solve():
+    for element in range(1, 2):
+        log(element)
+        for row in range(y):
+            for column in range(x):
+                element = playground[row][column]
+                log(f'element:{element}, row:{row}, column:{column}')
+                AnalyzeAround(element, row, column)
+    return ' '
+
+def solved():
+    rows = len(playground)
+    print('###############################################')
+    print('____Before____')
+    for i in range(rows):
+        print(playgroundBefore[i])
+    print('____After____')
+    for i in range(rows):
+        print(playground[i])
+    print('###############################################')
+
+print(solve())
