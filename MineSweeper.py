@@ -2,8 +2,6 @@
 import logging, time
 logging.basicConfig(level=logging.DEBUG, format='log: %(message)s')
 logging.disable(logging.CRITICAL)
-def log(code):
-    logging.debug(code)
 
 
 playgroundBefore = ['?*1', '*?1', '??1']
@@ -35,11 +33,9 @@ def solve():
             AnalyzeAround(element, row, column)
 
 def AnalyzeAround(element, row, column):
-    log(f'enter AnalyzeAround with element: {element}, row: {row}, column: {column}')        
     elementAround = []
     if corner(row, column):
         positionType = corner(row, column)
-        log(f'positionType: {positionType} {row} {column}')
         for moveY in range(2):
             for moveX in range(2):
                 cornerType = {
@@ -51,7 +47,6 @@ def AnalyzeAround(element, row, column):
                 cornerApply = cornerType[positionType]
                 elementAround.append(cornerApply)
         
-        log(f'elementAround: {elementAround}')
         checkAround(element, elementAround, row)
 
     elif TRBL(row, column):
@@ -67,17 +62,13 @@ def AnalyzeAround(element, row, column):
         checkAround(element, elementAround, row)
 
     else:  # Central
-        log(f'enter central')
         for moveY in (1, 0, -1):
             for moveX in (1, 0, -1):
-                log(f'positionType: {row} {column} {moveY} {moveX}')
                 applyElement = playground[moveY][moveX]
                 elementAround.append(applyElement)
-        log(f'elementAround: {elementAround}')
         checkAround(element, elementAround, row)
 
 def corner(row, column):
-    log('enter corner')
     if row == 0 and column == 0: return 'TopLeft'
     elif row == 0 and column == x - 1: return 'TopRight'
     elif row == x - 1 and column == 0: return 'BottomLeft'
@@ -85,7 +76,6 @@ def corner(row, column):
     else: return False
 
 def TRBL(row, column):
-    log(f'TRBL: {row} {column}')
     if column == 0: return 'Left'
     elif column == x: return 'Right'
     elif row == 0: return 'Top'
@@ -93,17 +83,14 @@ def TRBL(row, column):
     else: return False
 
 def checkAround(element, elementAround, row):
-    log('67: enter checkAround')
     unknownCounter = elementAround.count('?')
     bombCounter = elementAround.count('*')
     if not unknownCounter:
         if element == 'S':
-            log(f'GG BROTHER -------------------------------------')
             uncoverTheSafePoint(row, str(bombCounter))
         else: return f'There is not S and Not ?'
     else:
         unknownIndex = elementAround.index('?')
-        log(f'number of ?: {unknownCounter} |  Index of ?: {unknownIndex} | number of *: {bombCounter}')
 
         if element == '1':
             if unknownCounter == 1 and bombCounter == 0:
@@ -111,7 +98,7 @@ def checkAround(element, elementAround, row):
             elif bombCounter == 1:
                 addSolution(row, unknownCounter, solution = 'S')
             else:
-                log('There is an error in checkAround !!!!!!!!!!!!!!!!')
+                print('There is an error in checkAround: 101')
 
         elif element == '2':
             if unknownCounter == 1 and bombCounter == 1:
@@ -121,7 +108,7 @@ def checkAround(element, elementAround, row):
             elif bombCounter == 2:
                 addSolution(row, 8, solution = 'S')
             else:
-                print('There is an error in checkAround')
+                print('There is an error in checkAround: 111')
 
         elif element == '3':
             if unknownCounter == 3 and bombCounter == 0:
@@ -133,7 +120,7 @@ def checkAround(element, elementAround, row):
             elif bombCounter == 3:
                 addSolution(row, 8, solution = 'S')
             else:
-                log('There is an error in checkAround')
+                print('There is an error in checkAround: 123')
 
         else: return 'The element bigger than 3'
 
@@ -142,40 +129,34 @@ def addSolution(row, unknownToAdd, solution):
         for moveY in range(2):
             newRow = playground[row + moveY].replace('?', solution, unknownToAdd)
             playground[row + moveY] = newRow
-            log(f'144: newRow: {newRow}')
     elif row == y - 1:
         for moveY in range(2):
             newRow = playground[row - moveY].replace('?', solution, unknownToAdd)
             playground[row - moveY] = newRow
-            log(f'149: newRow: {newRow}')
     else:
         for move in (-1, 0, 1):
             newRow = playground[row - move].replace('?', solution, unknownToAdd)
             playground[row - move] = newRow
-            log(f'149: newRow: {newRow}')
 def uncoverTheSafePoint(row, bombCounter):
         if row == 0:
             for moveY in range(2):
                 newRow = playground[row + moveY].replace('S', bombCounter, 8)
                 playground[row + moveY] = newRow
-                log(f'144: newRow: {newRow}')
         elif row == y - 1:
             for moveY in range(2):
                 newRow = playground[row - moveY].replace('S', bombCounter, 8)
                 playground[row - moveY] = newRow
-                log(f'149: newRow: {newRow}')
         else:
             for move in (-1, 0, 1):
                 newRow = playground[row - move].replace('S', bombCounter, 8)
                 playground[row - move] = newRow
-                log(f'149: newRow: {newRow}')
 
 def bombscounter():
     return
 
 def solved():
-    timerEnd = time.time()
-    solvedIn = str(timerEnd - timerStart)
+    timerEnd = time.time() * 1000 # in milliseconds
+    solvedIn = str(timerEnd - timerStart)[:5]
     rows = len(playground)
     print(f'________________Solved In: {solvedIn}________________')
     print('____Before____')
@@ -184,7 +165,6 @@ def solved():
     print('____After____')
     for i in range(rows):
         print(playground[i])
-    # print(f'________________{bombCounter}Bombs Detected________________')
 
-timerStart = time.time()
+timerStart = time.time() * 1000  # in milliseconds
 print(start())
