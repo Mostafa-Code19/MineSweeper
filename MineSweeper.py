@@ -6,15 +6,15 @@ def log(code):
     logging.debug(code)
 
 
-playgroundBefore = ['221', '?*?', '???']
+playgroundBefore = ['???', '?2?', '???']
 # playground = ['122', '?*?', '?2?']  # = 122 S** S2S
 # playground = ['?3*', '*6*', '***']
-playground = ['221', '?*?', '???']  # 221 **S SSS
+# playground = ['221', '?*?', '???']  # 221 **S SSS
 # playground = ['2?1', '?21', '11*']
 # playground = ['3?2', '??2', '221']
 # playground = ['1?2', '12*', '1?2']
 # playground = ['1?1', '222', '1?1']
-# playground = ['???', '?2?', '???']
+playground = ['???', '*2*', '???']
 
 x = 3
 y = 3
@@ -53,17 +53,12 @@ def AnalyzeAround(element, row, column):
         positionType = TRBL(row, column)
         for move in range(2):
             for moveOpposite in (1, 0, -1):
-                log(f'positionType: {positionType} {row} {column} {move} {moveOpposite}')
-                TRBLType = {
-                    'Top' : playground[row + move][column - moveOpposite], # 01 | 00 01 02 10 11 12 ok
-                    'Right' : playground[row - moveOpposite][column - move], # 12 | 02 12 22 01 11 21
-                    'Bottom' : playground[row - move][column - moveOpposite], # 21 | 20 21 22 10
-                    'Left' : playground[row - moveOpposite][column + move], # 10 | 00 10 20 01 11 21 ok
-                }
-                cornerApply = TRBLType.get(positionType)
+                if positionType == 'Top': cornerApply = playground[row + move][column - moveOpposite]
+                elif positionType == 'Right': cornerApply = playground[row - moveOpposite][column - move]
+                elif positionType == 'Bottom': cornerApply = playground[row - move][column - moveOpposite]
+                elif positionType == 'Left': cornerApply = playground[row - moveOpposite][column + move]
                 elementAround.append(cornerApply)
         
-        log(f'elementAround: {elementAround}')
         checkAround(element, elementAround, row)
 
     else:  # All around the center
@@ -71,8 +66,8 @@ def AnalyzeAround(element, row, column):
         for moveY in (1, 0, -1):
             for moveX in (1, 0, -1):
                 log(f'positionType: {row} {column} {moveY} {moveX}')
-                element = playground[moveY][moveX]
-                elementAround.append(element)
+                applyElement = playground[moveY][moveX]
+                elementAround.append(applyElement)
         log(f'elementAround: {elementAround}')
         checkAround(element, elementAround, row)
 
@@ -101,24 +96,20 @@ def checkAround(element, elementAround, row):
     unknownIndex = elementAround.index('?')
     bombCounter = elementAround.count('*')
     log(f'number of ?: {unknownCounter} |  Index of ?: {unknownIndex} | number of *: {bombCounter}')
-
-    if element == '?': return False
-
-    elif element == '1':
+    if element == '1':
         if unknownCounter == 1 and bombCounter == 0:
             addSolution(row, unknownCounter, solution = '*')
-        elif bombCounter:
+        elif bombCounter == 1:
             addSolution(row, unknownCounter, solution = 'S')
         else:
             log('There is an error in checkAround !!!!!!!!!!!!!!!!')
 
     elif element == '2':
-        if unknownCounter and bombCounter:
+        if unknownCounter == 1 and bombCounter == 1:
             addSolution(row, unknownCounter, solution = '*')
         elif unknownCounter == 2:
             addSolution(row, unknownCounter, solution = '*')
         elif bombCounter == 2:
-            log(f'holllllla entering for 2 bomb - element: {element} row: {row}')
             addSolution(row, 8, solution = 'S')
         else:
             print('There is an error in checkAround')
@@ -126,9 +117,9 @@ def checkAround(element, elementAround, row):
     elif element == '3':
         if unknownCounter == 3 and bombCounter == 0:
             addSolution(row, 8, solution = '*')
-        elif unknownCounter == 2 and bombCounter:
+        elif unknownCounter == 2 and bombCounter == 1:
             addSolution(row, unknownCounter, solution = '*')
-        elif unknownCounter and bombCounter == 2:
+        elif unknownCounter == 1 and bombCounter == 2:
             addSolution(row, unknownCounter, solution = '*')
         elif bombCounter == 3:
             addSolution(row, 8, solution = 'S')
