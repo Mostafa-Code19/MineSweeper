@@ -6,17 +6,17 @@ def log(code):
     logging.debug(code)
 
 
-playgroundBefore = ['?*1', '*?1', '??1','?*1', '122', 'S1*', 'S12']
+playgroundBefore = ['1?2', '12*', '1?2']
 # playground = ['122', '?*?', '?2?']  # = 122 S** S2S
 # playground = ['?3*', '*6*', '***']
 # playground = ['221', '?*?', '???']  # 221 **S SSS
 # playground = ['2?1', '?2S', '11*']
 # playground = ['2*1', '*2S', '11*']
 # playground = ['3?2', '??2', '221']
-# playground = ['1?2', '12*', '1?2']
+playground = ['1?2', '12*', '1?2']
 # playground = ['1?1', '222', '1?1']
 # playground = ['???', '*2*', '???']
-playground = ['*?1', '??1','?*1', '122', 'S1*', 'S12', '?*1']
+# playground = ['*?1', '??1','?*1', '122', 'S1*', 'S12', '?*1']
 
 x = 3
 y = 6
