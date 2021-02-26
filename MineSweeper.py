@@ -6,20 +6,20 @@ def log(code):
     logging.debug(code)
 
 
-playgroundBefore = ['1?2', '12*', '1?2']
+playgroundBefore = ['?*1', '*?1', '??1']
 # playground = ['122', '?*?', '?2?']  # = 122 S** S2S
 # playground = ['?3*', '*6*', '***']
 # playground = ['221', '?*?', '???']  # 221 **S SSS
 # playground = ['2?1', '?2S', '11*']
 # playground = ['2*1', '*2S', '11*']
 # playground = ['3?2', '??2', '221']
-playground = ['1?2', '12*', '1?2']
+playground = ['?*1', '*?1', '??1']
 # playground = ['1?1', '222', '1?1']
 # playground = ['???', '*2*', '???']
 # playground = ['*?1', '??1','?*1', '122', 'S1*', 'S12', '?*1']
 
 x = 3
-y = 6
+y = 3
 playgroundsize = [x, y]
 
 def start():
@@ -87,9 +87,9 @@ def corner(row, column):
 def TRBL(row, column):
     log(f'TRBL: {row} {column}')
     if column == 0: return 'Left'
-    elif column == x - 1: return 'Right'
+    elif column == x: return 'Right'
     elif row == 0: return 'Top'
-    elif row == y - 1: return 'Bottom'
+    elif row == y: return 'Bottom'
     else: return False
 
 def checkAround(element, elementAround, row):
@@ -180,10 +180,10 @@ def solved():
     print(f'________________Solved In: {solvedIn}________________')
     print('____Before____')
     for i in range(rows):
-        print(playgroundBefore[i - 1])
+        print(playgroundBefore[i])
     print('____After____')
     for i in range(rows):
-        print(playground[i - 1])
+        print(playground[i])
     # print(f'________________{bombCounter}Bombs Detected________________')
 
 timerStart = time.time()
