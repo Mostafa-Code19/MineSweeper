@@ -6,7 +6,7 @@ def log(code):
     logging.debug(code)
 
 
-playgroundBefore = ['???', '?2?', '???']
+playgroundBefore = ['221SS', '?*?SS', '????S', '***??', '2321?']
 # playground = ['122', '?*?', '?2?']  # = 122 S** S2S
 # playground = ['?3*', '*6*', '***']
 # playground = ['221', '?*?', '???']  # 221 **S SSS
@@ -14,7 +14,8 @@ playgroundBefore = ['???', '?2?', '???']
 # playground = ['3?2', '??2', '221']
 # playground = ['1?2', '12*', '1?2']
 # playground = ['1?1', '222', '1?1']
-playground = ['???', '*2*', '???']
+# playground = ['???', '*2*', '???']
+playground = ['221SS', '?*?SS', '????S', '***??', '2321?']
 
 x = 3
 y = 3
@@ -107,7 +108,7 @@ def checkAround(element, elementAround, row):
     elif element == '2':
         if unknownCounter == 1 and bombCounter == 1:
             addSolution(row, unknownCounter, solution = '*')
-        elif unknownCounter == 2:
+        elif unknownCounter == 2 and bombCounter == 0:
             addSolution(row, unknownCounter, solution = '*')
         elif bombCounter == 2:
             addSolution(row, 8, solution = 'S')
