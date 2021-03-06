@@ -1,7 +1,7 @@
 
 import logging, time
 logging.basicConfig(level=logging.DEBUG, format='log: %(message)s')
-# logging.disable(logging.CRITICAL)
+logging.disable(logging.CRITICAL)
 
 
 playgroundBefore = ['?*1', '*?1', '??1']
@@ -30,13 +30,57 @@ def solve():
     for row in range(y):
         for column in range(x):
             element = playground[row][column]
-            # AnalyzeAround(element, row, column)
+            AnalyzeAround(element, row, column)
 
+def AnalyzeAround(element, row, column):
+    elementAround = []
+    if corner(row, column):
+        positionType = corner(row, column)
+        for moveY in range(2):
+            for moveX in range(2):
+                cornerType = {
+                    'TopLeft' : playground[moveX][moveY],
+                    'TopRight' : playground[moveX][x - moveY - 1],
+                    'BottomLeft' : playground[y - moveX - 1][moveY],
+                    'BottomRight' : playground[y - moveX - 1][x - moveY - 1]
+                }
+                cornerApply = cornerType[positionType]
+                elementAround.append(cornerApply)
+        
+        checkAround(element, elementAround, row)
 
+    elif TRBL(row, column):
+        positionType = TRBL(row, column)
+        for move in range(2):
+            for moveOpposite in (1, 0, -1):
+                if positionType == 'Top': cornerApply = playground[row + move][column - moveOpposite]
+                elif positionType == 'Right': cornerApply = playground[row - moveOpposite][column - move]
+                elif positionType == 'Bottom': cornerApply = playground[row - move][column - moveOpposite]
+                elif positionType == 'Left': cornerApply = playground[row - moveOpposite][column + move]
+                elementAround.append(cornerApply)
+        
+        checkAround(element, elementAround, row)
 
-# read around
+    else:  # Central
+        for moveY in (1, 0, -1):
+            for moveX in (1, 0, -1):
+                applyElement = playground[moveY][moveX]
+                elementAround.append(applyElement)
+        checkAround(element, elementAround, row)
 
+def corner(row, column):
+    if row == 0 and column == 0: return 'TopLeft'
+    elif row == 0 and column == x - 1: return 'TopRight'
+    elif row == x - 1 and column == 0: return 'BottomLeft'
+    elif row == x - 1 and column == y - 1: return 'BottomRight'
+    else: return False
 
+def TRBL(row, column):
+    if column == 0: return 'Left'
+    elif column == x: return 'Right'
+    elif row == 0: return 'Top'
+    elif row == y: return 'Bottom'
+    else: return False
 
 def checkAround(element, elementAround, row):
     unknownCounter = elementAround.count('?')
