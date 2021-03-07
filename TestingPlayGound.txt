@@ -1,0 +1,46 @@
+Testing Playground
+
+playground = [
+  '122',
+  '?*?',
+  '?2?']
+
+playground = [
+  '?3*',
+  '*6*',
+  '***']
+
+playground = [
+  '221',
+  '?*?',
+  '???']
+
+playground = [
+  '2?1',
+  '?2S',
+  '11*']
+
+playground = [
+  '2*1',
+  '*2S',
+  '11*']
+
+playground = [
+  '3?2',
+  '??2',
+  '221']
+
+Playground = [
+  '?*1',
+  '*?1',
+  '??S']
+
+playground = [
+  '1?1',
+  '222',
+  '1?1']
+
+playground = [
+  '???',
+  '*2*',
+  '???']

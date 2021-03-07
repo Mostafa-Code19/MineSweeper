@@ -49,7 +49,7 @@ def AnalyzeAround(element, row, column):
         
         checkAround(element, elementAround, row)
 
-    elif TRBL(row, column):
+    # elif TRBL(row, column):
         positionType = TRBL(row, column)
         for move in range(2):
             for moveOpposite in (1, 0, -1):
